@@ -82,7 +82,7 @@ def main():
             f"*Welcome to the #IFoundIt challenge, what would you like to do?*\n{currentDT}\n\n_*Reply with the number below(or emoji)*_\n\n1. Show the latest Leaderboard 📊️\n2. Register to Join 🤩\n3. Submit a Challenge 📲\n0. Main Menu 🔢")
 
     # Leaderboard
-    if incoming_msg == '1' or incoming_msg == '📊️':
+    elif incoming_msg == '1' or incoming_msg == '📊️':
         # msg.body(f'This will be available in a moment.')
 
         list_data = User.query.order_by(
@@ -123,12 +123,12 @@ def main():
         return str(resp)
 
     # Registration
-    if incoming_msg == '2' or incoming_msg == '🤩':
+    elif incoming_msg == '2' or incoming_msg == '🤩':
         msg.body(f'To register your name onto the Leaderboard, first you have to fill-in this registration form.📝\n_Just copy and paste this message._\n\nUsername: \nPassword: \nCell Group: \nPhone No.: ')
 
         return str(resp)
 
-    if 'To register your name onto the Leaderboard, first you have to fill-in this registration form.📝' in incoming_msg:
+    elif 'To register your name onto the Leaderboard, first you have to fill-in this registration form.📝' in incoming_msg:
         registerUser = Credentials()
         registerUser.username = incoming_msg.split('\n')[3][10:]
         registerUser.password = incoming_msg.split('\n')[4][10:]
@@ -179,15 +179,15 @@ def main():
         return str(resp)
 
     # Submit a Challenge
-    if incoming_msg == '3' or incoming_msg == '📲':
+    elif incoming_msg == '3' or incoming_msg == '📲':
         msg.body(f'*List of Points to be earned*😎\nREPOST - 1️⃣ point\nFACE EMOJI CHALLENGE - 2️⃣ points\nRATE/DESCIBE - 5️⃣ points\nTRUTH/DARE - 7️⃣ points\n\nTo Submit a challenge, tell me your username.')
 
         return str(resp)
 
-    if incoming_msg in [data.username for data in User.query.all()]:
+    elif incoming_msg in [data.username for data in User.query.all()]:
         sendExamplesToUsers(incoming_msg)
 
-    if num_media:
+    elif num_media:
         if ') (' in incoming_msg:
             incoming_msg = incoming_msg.lstrip('(').rstrip(')').split(') (')
 
@@ -221,12 +221,12 @@ def main():
         return str(resp)
 
     # For admin only
-    if 'i am admin' in incoming_msg.lower():
+    elif 'i am admin' in incoming_msg.lower():
         msg.body(
             f'Prove yourself!😤 Login with an admin account using the following format.\n\nUsername: \nPassword: ')
         return str(resp)
 
-    if 'Prove yourself!😤 Login with an admin account using the following format.' in incoming_msg:
+    elif 'Prove yourself!😤 Login with an admin account using the following format.' in incoming_msg:
         adminUser = Credentials()
         adminUser.username = incoming_msg.split('\n')[2][10:]
         adminUser.password = incoming_msg.split('\n')[3][10:]
@@ -237,7 +237,7 @@ def main():
             if adminUser.username == admin.username and adminUser.password == admin.password:
                 msg.body(f'Okay... You are really an admin.😢\nWelcome back!\nTo verify a user\'s submission, use the following template.\n\n*Verification Template*✅\nUsername: \nType: \nResult: \nComment: ')
 
-    if 'Okay... You are really an admin.😢\nWelcome back!\nTo verify a user\'s submission, use the following template.' in incoming_msg:
+    elif 'Okay... You are really an admin.😢\nWelcome back!\nTo verify a user\'s submission, use the following template.' in incoming_msg:
         verifyUser = Credentials()
         verifyUser.username = incoming_msg.split('\n')[5][10:]
         challengeType = incoming_msg.split('\n')[6][6:]
@@ -285,6 +285,8 @@ def main():
                 body=f'I\'m sorry to inform that your challenge\'s proof does not pass the verification.😥\n\nBelow are the comments from our admin:\n{adminComment}',
                 to=f'whatsapp:+6{updateThis.phoneNo}'
             )
+    else:
+        msg.body("Sorry I don't get what you said.😢")
 
     return str(resp)
 
